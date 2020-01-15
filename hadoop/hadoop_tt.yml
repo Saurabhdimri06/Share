@@ -1,0 +1,20 @@
+# Write java installer and hadoop using python
+# To create a dynamic group for nodes
+
+ - hosts: localhost
+   vars:
+     ip: '{{ip}}'
+     private: no
+   tasks:
+     - add_host: 
+         name: "{{ip}}"
+         groups: hadoop_dyn_group
+
+ - hosts: hadoop_dyn_group
+   tasks:
+     - copy:
+         src: /root/Desktop/Ansible/hadoop/mapred-site.xml
+         dest: /etc/hadoop/
+
+     - command: hadoop-daemon.sh start tasktracker
+

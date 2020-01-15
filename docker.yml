@@ -1,0 +1,34 @@
+ - hosts: 192.168.43.181
+
+   tasks:
+    - copy:
+        src: /root/Desktop/softwares/rhel7_5_software_extras/centos-latest.tar
+        dest: /tmp/
+
+    - package: 
+        name: docker-ce
+        state: present
+
+    - pip: 
+        name: docker
+        state: present
+        executable: pip2
+    
+    - service: 
+        name: docker
+        state: started
+
+    - docker_image:
+        name: centos
+        load_path: /tmp/centos-latest.tar
+        state: present
+
+    - file:
+        path: /tmp/centos-latest.tar
+        state: absent
+
+    - file:
+        path: /tmp/python2-pip-8.1.2-6.el7.noarch.rpm
+        state: absent
+
+

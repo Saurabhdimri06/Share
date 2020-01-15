@@ -1,0 +1,44 @@
+ - hosts: localhost
+   vars:
+     ip: '{{ip}}'
+     private: no
+   tasks:
+     - add_host: 
+         name: "{{ip}}"
+         groups: docker_dyn_group
+
+
+ - hosts: docker_dyn_group
+   vars: 
+     cpath: path
+
+   tasks:
+    - copy:
+        src: /root/Desktop/softwares/rhel7_5_software_extras/{{cpath}}
+        dest: /tmp/
+
+    - package: 
+        name: docker-ce
+        state: present
+
+    - pip: 
+        name: docker
+        state: present
+        executable: pip2
+    
+    - service: 
+        name: docker
+        state: started
+
+    - docker_image:
+        name: "{{cpath}}"
+        load_path: /tmp/{{cpath}}
+        state: present
+
+    - file:
+        path: /tmp/{{cpath}}
+        state: absent
+
+
+# To run this ansible file use command 
+# ansible-playbook -e "ip=<ip> cpath=<path>" advdocker.yml 

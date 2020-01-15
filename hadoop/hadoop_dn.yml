@@ -1,0 +1,28 @@
+# Write java installer and hadoop using python
+# To create a dynamic group for nodes
+
+ - hosts: localhost
+   vars:
+     ip: '{{ip}}'
+     private: no
+   tasks:
+     - add_host: 
+         name: "{{ip}}"
+         groups: hadoop_dyn_group
+
+ - hosts: hadoop_dyn_group
+   tasks:
+     - file:
+         path: /data
+         state: directory
+
+     - copy:
+         src: /root/Desktop/Ansible/hadoop/datanode/hdfs-site.xml
+         dest: /etc/hadoop/
+
+     - copy:
+         src: /root/Desktop/Ansible/hadoop/core-site.xml
+         dest: /etc/hadoop/
+
+     - command: hadoop-daemon.sh start datanode
+

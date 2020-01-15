@@ -1,0 +1,19 @@
+ - hosts: all
+   tasks:
+    - package:
+       name: httpd
+       state: present
+   
+    - service:
+       name: httpd
+       state: started
+
+    - copy:
+       src: /root/Desktop/Ansible/a.html
+       dest: /var/www/html/
+
+    - firewalld:
+       port: "80/tcp"
+       state: disabled
+       permanent: yes
+       immediate: yes
